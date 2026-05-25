@@ -44,25 +44,41 @@
   min-height: 0;
 }
 
+.map-loading,
 .map-error {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 12px;
   color: var(--color-muted);
   text-align: center;
   padding: 40px 20px;
 }
 
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 .map-error p {
   font-size: 18px;
   font-weight: 600;
+  color: var(--color-text);
 }
 
 .map-error small {
   font-size: 13px;
+  line-height: 1.6;
 }
 
 .bottom-panel {

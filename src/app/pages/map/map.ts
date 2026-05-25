@@ -17,9 +17,11 @@ declare const kakao: any;
 export class MapPage implements AfterViewInit, OnDestroy {
   private map: any;
   private markers: any[] = [];
+  private retryTimer: any;
 
   readonly selectedSpot = signal<Spot | null>(null);
   readonly mapError = signal(false);
+  readonly mapLoading = signal(true);
   readonly selectedSize = computed(() => this.dogSizeService.selectedSize());
   readonly spots = computed(() => {
     const size = this.selectedSize();
@@ -36,29 +38,44 @@ export class MapPage implements AfterViewInit, OnDestroy {
   ) {}
 
   ngAfterViewInit() {
-    if (typeof kakao === 'undefined' || typeof kakao.maps === 'undefined') {
-      this.mapError.set(true);
-      return;
-    }
-    // kakao.maps.load() 는 SDK가 완전히 준비된 후 콜백을 실행 — SPA 필수 패턴
-    kakao.maps.load(() => this.initMap());
+    this.waitForKakao(0);
   }
 
   ngOnDestroy() {
+    clearTimeout(this.retryTimer);
     this.markers.forEach(m => m.setMap(null));
     this.markers = [];
   }
 
-  private initMap() {
-    const container = document.getElementById('kakao-map');
-    if (!container) return;
+  // SDK가 완전히 로드될 때까지 최대 6초(20회 × 300ms) 재시도
+  private waitForKakao(attempt: number) {
+    if (typeof kakao !== 'undefined') {
+      kakao.maps.load(() => {
+        this.mapLoading.set(false);
+        this.initMap();
+      });
+    } else if (attempt < 20) {
+      this.retryTimer = setTimeout(() => this.waitForKakao(attempt + 1), 300);
+    } else {
+      this.mapLoading.set(false);
+      this.mapError.set(true);
+    }
+  }
 
-    const options = {
-      center: new kakao.maps.LatLng(36.3504, 127.3845),
-      level: 8,
-    };
-    this.map = new kakao.maps.Map(container, options);
-    this.addMarkers();
+  private initMap() {
+    try {
+      const container = document.getElementById('kakao-map');
+      if (!container) return;
+
+      this.map = new kakao.maps.Map(container, {
+        center: new kakao.maps.LatLng(36.3504, 127.3845),
+        level: 8,
+      });
+      this.addMarkers();
+    } catch (e) {
+      console.error('Kakao Map init error:', e);
+      this.mapError.set(true);
+    }
   }
 
   private addMarkers() {
@@ -69,14 +86,12 @@ export class MapPage implements AfterViewInit, OnDestroy {
       const pos = new kakao.maps.LatLng(spot.lat, spot.lng);
       const congestion = this.congestionService.getCongestion(spot.spot_type);
 
-      // CustomOverlay 대신 표준 Marker 사용 — 클릭 이벤트가 안정적
       const marker = new kakao.maps.Marker({
         map: this.map,
         position: pos,
         title: spot.name,
       });
 
-      // 마커 위에 혼잡도 라벨 표시
       const label = new kakao.maps.CustomOverlay({
         map: this.map,
         position: pos,
@@ -85,7 +100,7 @@ export class MapPage implements AfterViewInit, OnDestroy {
           padding:4px 8px;border-radius:12px;
           font-size:11px;font-weight:700;white-space:nowrap;
           box-shadow:0 2px 6px rgba(0,0,0,0.25);
-          margin-bottom:4px;pointer-events:none;
+          pointer-events:none;
         ">${congestion.emoji} ${congestion.label}</div>`,
         yAnchor: 3.2,
       });
@@ -98,15 +113,7 @@ export class MapPage implements AfterViewInit, OnDestroy {
     });
   }
 
-  goBack() {
-    this.router.navigate(['/list']);
-  }
-
-  goToDetail(id: string) {
-    this.router.navigate(['/detail', id]);
-  }
-
-  closePanel() {
-    this.selectedSpot.set(null);
-  }
+  goBack() { this.router.navigate(['/list']); }
+  goToDetail(id: string) { this.router.navigate(['/detail', id]); }
+  closePanel() { this.selectedSpot.set(null); }
 }
