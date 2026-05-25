@@ -1,0 +1,58 @@
+@if (spot()) {
+  <div class="page">
+    <div class="img-wrap">
+      <img [src]="spot()!.image_url" [alt]="spot()!.name" class="hero-img" />
+      <button class="back-btn" (click)="goBack()">←</button>
+      @if (currentCongestion()) {
+        <div class="congestion-float">
+          <app-congestion-badge [info]="currentCongestion()!" />
+        </div>
+      }
+    </div>
+
+    <div class="content">
+      <h1>{{ spot()!.name }}</h1>
+      <p class="address">📍 {{ spot()!.address }}</p>
+      <p class="desc">{{ spot()!.description }}</p>
+
+      <section class="section">
+        <h2>추천 견종 크기</h2>
+        <div class="size-chips">
+          @for (s of spot()!.size_suitable; track s) {
+            <span class="size-chip">{{ DOG_SIZE_LABELS[s] }}</span>
+          }
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>시설 정보</h2>
+        <div class="feature-grid">
+          @for (f of spot()!.features; track f) {
+            <div class="feature-item">
+              <span class="feature-check">✓</span>
+              <span>{{ FEATURE_LABELS[f] ?? f }}</span>
+            </div>
+          }
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>시간대별 혼잡도 예측</h2>
+        <div class="schedule-list">
+          @for (item of schedule(); track item.label) {
+            <div class="schedule-row">
+              <span class="schedule-label">{{ item.label }}</span>
+              <app-congestion-badge [info]="item.level" />
+            </div>
+          }
+        </div>
+        <p class="schedule-note">※ 시간대 통계 기반 예측치이며 실제와 다를 수 있습니다.</p>
+      </section>
+    </div>
+  </div>
+} @else {
+  <div class="not-found">
+    <p>장소를 찾을 수 없습니다.</p>
+    <button (click)="goBack()">← 목록으로</button>
+  </div>
+}

@@ -1,0 +1,161 @@
+.page {
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+
+.header {
+  background: var(--color-card);
+  padding: 20px 20px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.header-top h1 {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0;
+  color: var(--color-text);
+}
+
+.map-btn {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.map-btn:hover { opacity: 0.85; }
+
+.subtitle {
+  font-size: 14px;
+  color: var(--color-muted);
+  margin: 0 0 16px;
+}
+
+.size-tabs {
+  display: flex;
+  gap: 8px;
+  padding-bottom: 12px;
+}
+
+.size-tab {
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 2px solid var(--color-border);
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.size-tab.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.list {
+  padding: 16px 16px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.spot-card {
+  display: block;
+  background: var(--color-card);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.spot-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.spot-img-wrap {
+  position: relative;
+  height: 180px;
+}
+
+.spot-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.congestion-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.spot-body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.spot-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.spot-address {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.spot-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.feature-chip {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--color-muted);
+  font-weight: 500;
+}
+
+.size-badges {
+  display: flex;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.size-badge {
+  background: #E8F5E9;
+  color: #2E7D32;
+  border-radius: 8px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 600;
+}

@@ -1,0 +1,46 @@
+<div class="page">
+  <header class="header">
+    <div class="header-top">
+      <h1>🐾 산책 장소</h1>
+      <button class="map-btn" (click)="goToMap()">🗺️ 지도 보기</button>
+    </div>
+    <p class="subtitle">{{ sizeLabel() }}에게 맞는 장소 {{ spots().length }}곳</p>
+
+    <div class="size-tabs">
+      @for (s of sizes; track s) {
+        <button
+          class="size-tab"
+          [class.active]="selectedSize() === s"
+          (click)="setSize(s)"
+        >{{ DOG_SIZE_LABELS[s] }}</button>
+      }
+    </div>
+  </header>
+
+  <div class="list">
+    @for (spot of spots(); track spot.id) {
+      <a class="spot-card" [routerLink]="['/detail', spot.id]">
+        <div class="spot-img-wrap">
+          <img [src]="spot.image_url" [alt]="spot.name" class="spot-img" loading="lazy" />
+          <div class="congestion-overlay">
+            <app-congestion-badge [info]="congestionService.getCongestion(spot.spot_type)" />
+          </div>
+        </div>
+        <div class="spot-body">
+          <div class="spot-name">{{ spot.name }}</div>
+          <div class="spot-address">📍 {{ spot.address }}</div>
+          <div class="spot-features">
+            @for (f of spot.features.slice(0, 3); track f) {
+              <span class="feature-chip">{{ getFeatureLabel(f) }}</span>
+            }
+          </div>
+          <div class="size-badges">
+            @for (s of spot.size_suitable; track s) {
+              <span class="size-badge">{{ DOG_SIZE_LABELS[s] }}</span>
+            }
+          </div>
+        </div>
+      </a>
+    }
+  </div>
+</div>

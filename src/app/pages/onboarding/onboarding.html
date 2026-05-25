@@ -1,0 +1,23 @@
+<div class="page">
+  <div class="hero">
+    <div class="hero-icon">🐶</div>
+    <h1>대전 강아지 산책 지도</h1>
+    <p>우리 강아지 크기에 맞는<br>최적의 산책 장소를 찾아드려요</p>
+  </div>
+
+  <div class="section-title">우리 강아지는 어떤 크기인가요?</div>
+
+  <div class="cards">
+    @for (size of sizes; track size.value) {
+      <button class="size-card" (click)="select(size.value)">
+        <span class="size-emoji">{{ size.emoji }}</span>
+        <div class="size-info">
+          <span class="size-label">{{ size.label }}</span>
+          <span class="size-kg">{{ size.kg }}</span>
+          <span class="size-desc">{{ size.desc }}</span>
+        </div>
+        <span class="arrow">›</span>
+      </button>
+    }
+  </div>
+</div>

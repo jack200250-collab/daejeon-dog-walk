@@ -1,0 +1,29 @@
+<div class="map-page">
+  <div class="map-header">
+    <button class="back-btn" (click)="goBack()">← 목록</button>
+    <span class="map-title">🗺️ 대전 산책 지도</span>
+    <span class="spot-count">{{ spots().length }}곳</span>
+  </div>
+
+  <div id="kakao-map" class="kakao-map"></div>
+
+  @if (selectedSpot()) {
+    <div class="bottom-panel">
+      <button class="close-btn" (click)="closePanel()">✕</button>
+      <img [src]="selectedSpot()!.image_url" [alt]="selectedSpot()!.name" class="panel-img" />
+      <div class="panel-body">
+        <div class="panel-top">
+          <span class="panel-name">{{ selectedSpot()!.name }}</span>
+          <app-congestion-badge [info]="congestionService.getCongestion(selectedSpot()!.spot_type)" />
+        </div>
+        <div class="panel-address">📍 {{ selectedSpot()!.address }}</div>
+        <div class="size-badges">
+          @for (s of selectedSpot()!.size_suitable; track s) {
+            <span class="size-badge">{{ DOG_SIZE_LABELS[s] }}</span>
+          }
+        </div>
+        <button class="detail-btn" (click)="goToDetail(selectedSpot()!.id)">상세 정보 보기 →</button>
+      </div>
+    </div>
+  }
+</div>
