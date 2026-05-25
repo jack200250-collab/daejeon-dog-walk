@@ -5,7 +5,14 @@
     <span class="spot-count">{{ spots().length }}곳</span>
   </div>
 
-  <div id="kakao-map" class="kakao-map"></div>
+  @if (mapError()) {
+    <div class="map-error">
+      <p>🗺️ 지도를 불러오지 못했습니다.</p>
+      <small>카카오 개발자 콘솔에서 현재 도메인이 등록됐는지 확인해주세요.</small>
+    </div>
+  } @else {
+    <div id="kakao-map" class="kakao-map"></div>
+  }
 
   @if (selectedSpot()) {
     <div class="bottom-panel">

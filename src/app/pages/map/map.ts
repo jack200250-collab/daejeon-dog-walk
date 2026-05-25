@@ -19,6 +19,7 @@ export class MapPage implements AfterViewInit, OnDestroy {
   private markers: any[] = [];
 
   readonly selectedSpot = signal<Spot | null>(null);
+  readonly mapError = signal(false);
   readonly selectedSize = computed(() => this.dogSizeService.selectedSize());
   readonly spots = computed(() => {
     const size = this.selectedSize();
@@ -35,19 +36,23 @@ export class MapPage implements AfterViewInit, OnDestroy {
   ) {}
 
   ngAfterViewInit() {
-    this.initMap();
+    if (typeof kakao === 'undefined' || typeof kakao.maps === 'undefined') {
+      this.mapError.set(true);
+      return;
+    }
+    // kakao.maps.load() 는 SDK가 완전히 준비된 후 콜백을 실행 — SPA 필수 패턴
+    kakao.maps.load(() => this.initMap());
   }
 
   ngOnDestroy() {
+    this.markers.forEach(m => m.setMap(null));
     this.markers = [];
   }
 
   private initMap() {
-    if (typeof kakao === 'undefined') {
-      console.warn('카카오맵 SDK가 로드되지 않았습니다. index.html의 API 키를 확인하세요.');
-      return;
-    }
     const container = document.getElementById('kakao-map');
+    if (!container) return;
+
     const options = {
       center: new kakao.maps.LatLng(36.3504, 127.3845),
       level: 8,
@@ -60,36 +65,36 @@ export class MapPage implements AfterViewInit, OnDestroy {
     this.markers.forEach(m => m.setMap(null));
     this.markers = [];
 
-    const spots = this.spots();
-    spots.forEach(spot => {
+    this.spots().forEach(spot => {
       const pos = new kakao.maps.LatLng(spot.lat, spot.lng);
       const congestion = this.congestionService.getCongestion(spot.spot_type);
 
-      const content = `
-        <div style="
-          background:${congestion.color};
-          color:#fff;
-          padding:6px 10px;
-          border-radius:20px;
-          font-size:12px;
-          font-weight:700;
-          white-space:nowrap;
-          box-shadow:0 2px 8px rgba(0,0,0,0.2);
-          cursor:pointer;
-        ">${congestion.emoji} ${spot.name}</div>
-      `;
-
-      const overlay = new kakao.maps.CustomOverlay({
+      // CustomOverlay 대신 표준 Marker 사용 — 클릭 이벤트가 안정적
+      const marker = new kakao.maps.Marker({
+        map: this.map,
         position: pos,
-        content,
-        yAnchor: 1.3,
+        title: spot.name,
       });
-      overlay.setMap(this.map);
 
-      const listener = () => this.selectedSpot.set(spot);
-      overlay.getContent()?.addEventListener?.('click', listener);
+      // 마커 위에 혼잡도 라벨 표시
+      const label = new kakao.maps.CustomOverlay({
+        map: this.map,
+        position: pos,
+        content: `<div style="
+          background:${congestion.color};color:#fff;
+          padding:4px 8px;border-radius:12px;
+          font-size:11px;font-weight:700;white-space:nowrap;
+          box-shadow:0 2px 6px rgba(0,0,0,0.25);
+          margin-bottom:4px;pointer-events:none;
+        ">${congestion.emoji} ${congestion.label}</div>`,
+        yAnchor: 3.2,
+      });
 
-      this.markers.push(overlay);
+      kakao.maps.event.addListener(marker, 'click', () => {
+        this.selectedSpot.set(spot);
+      });
+
+      this.markers.push(marker, label);
     });
   }
 
