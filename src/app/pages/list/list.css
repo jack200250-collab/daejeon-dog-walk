@@ -26,6 +26,23 @@
   color: var(--color-text);
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.weather-chip {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-muted);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
 .map-btn {
   background: var(--color-primary);
   color: #fff;
@@ -44,6 +61,30 @@
   font-size: 14px;
   color: var(--color-muted);
   margin: 0 0 16px;
+}
+
+.city-tabs {
+  display: flex;
+  gap: 8px;
+  padding-bottom: 10px;
+}
+
+.city-tab {
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 2px solid var(--color-border);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.city-tab.active {
+  border-color: #5C6BC0;
+  background: #5C6BC0;
+  color: #fff;
 }
 
 .size-tabs {
@@ -126,6 +167,17 @@
 .spot-address {
   font-size: 13px;
   color: var(--color-muted);
+}
+
+.spot-why {
+  font-size: 13px;
+  color: var(--color-muted);
+  line-height: 1.5;
+  margin: 2px 0 4px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .spot-features {

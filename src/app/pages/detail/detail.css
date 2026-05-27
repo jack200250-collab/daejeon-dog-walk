@@ -1,18 +1,25 @@
 .page {
   min-height: 100vh;
   background: var(--color-bg);
-  padding-bottom: 40px;
+  padding-bottom: 48px;
 }
 
+/* ── 히어로 이미지 ── */
 .img-wrap {
   position: relative;
-  height: 260px;
+  height: 300px;
 }
 
 .hero-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%);
 }
 
 .back-btn {
@@ -29,39 +36,110 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  z-index: 2;
+}
+
+.hero-info {
+  position: absolute;
+  bottom: 52px;
+  left: 20px;
+  right: 80px;
+  z-index: 2;
+}
+
+.city-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.5);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 2px 10px;
+  margin-bottom: 6px;
+}
+
+.hero-info h1 {
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 4px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.hero-info .address {
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+  margin: 0;
 }
 
 .congestion-float {
   position: absolute;
   bottom: 14px;
-  right: 14px;
+  right: 16px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
 }
 
+.weather-float {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  background: rgba(0,0,0,0.35);
+  border-radius: 10px;
+  padding: 2px 8px;
+}
+
+/* ── 본문 ── */
 .content {
   padding: 20px 20px 0;
 }
 
-h1 {
-  font-size: 24px;
-  font-weight: 800;
-  color: var(--color-text);
-  margin: 0 0 6px;
-}
-
-.address {
-  font-size: 14px;
-  color: var(--color-muted);
-  margin: 0 0 12px;
-}
-
 .desc {
   font-size: 15px;
-  line-height: 1.7;
+  line-height: 1.75;
   color: var(--color-text);
-  margin: 0 0 4px;
+  margin: 0 0 20px;
 }
 
+/* ── 추천 이유 ── */
+.why-section {
+  display: flex;
+  gap: 14px;
+  background: #E8F5E9;
+  border-left: 4px solid var(--color-primary);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 4px;
+}
+
+.why-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.why-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.why-body {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #1B5E20;
+  margin: 0;
+}
+
+/* ── 공통 섹션 ── */
 .section {
   margin-top: 28px;
 }
@@ -70,11 +148,12 @@ h1 {
   font-size: 16px;
   font-weight: 700;
   color: var(--color-text);
-  margin: 0 0 12px;
+  margin: 0 0 14px;
   padding-bottom: 8px;
   border-bottom: 2px solid var(--color-border);
 }
 
+/* ── 견종 크기 ── */
 .size-chips {
   display: flex;
   gap: 8px;
@@ -85,35 +164,96 @@ h1 {
   background: #E8F5E9;
   color: #2E7D32;
   border-radius: 10px;
-  padding: 6px 16px;
+  padding: 7px 18px;
   font-size: 14px;
   font-weight: 700;
 }
 
-.feature-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+.size-note {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--color-muted);
+  line-height: 1.5;
 }
 
-.feature-item {
+/* ── 편의시설 ── */
+.amenity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.amenity-item {
+  background: var(--color-card);
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+}
+
+.amenity-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.amenity-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.amenity-label {
+  font-size: 15px;
+  font-weight: 700;
   color: var(--color-text);
 }
 
-.feature-check {
-  color: var(--color-primary);
-  font-weight: 700;
+.amenity-detail {
+  font-size: 13px;
+  color: var(--color-muted);
+  line-height: 1.6;
+  margin: 0;
+  padding-left: 30px;
+}
+
+/* ── 방문 팁 ── */
+.tips-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tip-item {
+  display: flex;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--color-text);
+  line-height: 1.6;
+  background: var(--color-card);
+  border-radius: 10px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow);
+}
+
+.tip-bullet {
+  flex-shrink: 0;
   font-size: 16px;
+}
+
+/* ── 혼잡도 예측 ── */
+.schedule-sub {
+  font-size: 13px;
+  color: var(--color-muted);
+  margin: -8px 0 12px;
 }
 
 .schedule-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .schedule-row {
@@ -121,7 +261,7 @@ h1 {
   align-items: center;
   justify-content: space-between;
   background: var(--color-card);
-  padding: 10px 14px;
+  padding: 11px 14px;
   border-radius: 10px;
   box-shadow: var(--shadow);
 }
@@ -132,12 +272,7 @@ h1 {
   font-weight: 500;
 }
 
-.schedule-note {
-  font-size: 12px;
-  color: var(--color-muted);
-  margin-top: 10px;
-}
-
+/* ── Not found ── */
 .not-found {
   display: flex;
   flex-direction: column;

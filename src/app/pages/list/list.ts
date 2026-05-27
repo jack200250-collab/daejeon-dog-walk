@@ -1,10 +1,11 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { DogSizeService } from '../../services/dog-size.service';
 import { SpotsService } from '../../services/spots.service';
 import { CongestionService } from '../../services/congestion.service';
+import { WeatherService } from '../../services/weather.service';
 import { CongestionBadge } from '../../components/congestion-badge/congestion-badge';
-import { DogSize, DOG_SIZE_LABELS, FEATURE_LABELS, Spot } from '../../models/spot.model';
+import { City, CITY_LABELS, DogSize, DOG_SIZE_LABELS, FEATURE_LABELS } from '../../models/spot.model';
 
 @Component({
   selector: 'app-list',
@@ -14,10 +15,15 @@ import { DogSize, DOG_SIZE_LABELS, FEATURE_LABELS, Spot } from '../../models/spo
 })
 export class ListPage {
   readonly selectedSize = computed(() => this.dogSizeService.selectedSize());
+  readonly selectedCity = computed(() => this.dogSizeService.selectedCity());
 
-  readonly spots = computed(() => {
-    const size = this.selectedSize();
-    return size ? this.spotsService.getBySize(size) : this.spotsService.getAll();
+  readonly spots = computed(() =>
+    this.spotsService.getFiltered(this.selectedCity(), this.selectedSize()),
+  );
+
+  readonly cityLabel = computed(() => {
+    const c = this.selectedCity();
+    return c ? CITY_LABELS[c] : '전체 지역';
   });
 
   readonly sizeLabel = computed(() => {
@@ -25,15 +31,22 @@ export class ListPage {
     return s ? DOG_SIZE_LABELS[s] : '전체';
   });
 
+  readonly cities: (City | null)[] = [null, 'daejeon', 'sejong'];
   readonly sizes: DogSize[] = ['small', 'medium', 'large'];
+  readonly CITY_LABELS = CITY_LABELS;
   readonly DOG_SIZE_LABELS = DOG_SIZE_LABELS;
 
   constructor(
     private dogSizeService: DogSizeService,
     private spotsService: SpotsService,
     public congestionService: CongestionService,
+    public weatherService: WeatherService,
     private router: Router,
   ) {}
+
+  setCity(city: City | null) {
+    this.dogSizeService.setCity(city);
+  }
 
   setSize(size: DogSize) {
     this.dogSizeService.setSize(size);

@@ -1,8 +1,24 @@
 <div class="map-page">
   <div class="map-header">
     <button class="back-btn" (click)="goBack()">← 목록</button>
-    <span class="map-title">🗺️ 대전 산책 지도</span>
-    <span class="spot-count">{{ spots().length }}곳</span>
+    <span class="map-title">🗺️ 산책 지도</span>
+    <div class="map-header-right">
+      @if (weatherService.current(); as w) {
+        <span class="weather-chip">{{ w.emoji }} {{ w.tempC }}°</span>
+      }
+      <span class="spot-count">{{ spots().length }}곳</span>
+    </div>
+  </div>
+
+  <div class="map-city-tabs">
+    <button class="map-city-tab" [class.active]="selectedCity() === null" (click)="selectCity(null)">전체</button>
+    @for (c of cities.slice(1); track c) {
+      <button
+        class="map-city-tab"
+        [class.active]="selectedCity() === c"
+        (click)="selectCity(c)"
+      >{{ CITY_LABELS[c!] }}</button>
+    }
   </div>
 
   @if (mapLoading()) {

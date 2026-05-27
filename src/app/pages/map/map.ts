@@ -4,9 +4,16 @@ import { DogSizeService } from '../../services/dog-size.service';
 import { SpotsService } from '../../services/spots.service';
 import { CongestionService } from '../../services/congestion.service';
 import { CongestionBadge } from '../../components/congestion-badge/congestion-badge';
-import { DOG_SIZE_LABELS, Spot } from '../../models/spot.model';
+import { City, CITY_LABELS, DOG_SIZE_LABELS, Spot } from '../../models/spot.model';
+import { WeatherService } from '../../services/weather.service';
 
 declare const kakao: any;
+
+const CITY_CENTERS: Record<string, { lat: number; lng: number; level: number }> = {
+  daejeon: { lat: 36.3504, lng: 127.3845, level: 8 },
+  sejong:  { lat: 36.5140, lng: 127.2650, level: 8 },
+  all:     { lat: 36.4350, lng: 127.3300, level: 9 },
+};
 
 @Component({
   selector: 'app-map',
@@ -22,18 +29,21 @@ export class MapPage implements AfterViewInit, OnDestroy {
   readonly selectedSpot = signal<Spot | null>(null);
   readonly mapError = signal(false);
   readonly mapLoading = signal(true);
+  readonly selectedCity = computed(() => this.dogSizeService.selectedCity());
   readonly selectedSize = computed(() => this.dogSizeService.selectedSize());
-  readonly spots = computed(() => {
-    const size = this.selectedSize();
-    return size ? this.spotsService.getBySize(size) : this.spotsService.getAll();
-  });
+  readonly spots = computed(() =>
+    this.spotsService.getFiltered(this.selectedCity(), this.selectedSize()),
+  );
 
+  readonly cities: (City | null)[] = [null, 'daejeon', 'sejong'];
+  readonly CITY_LABELS = CITY_LABELS;
   readonly DOG_SIZE_LABELS = DOG_SIZE_LABELS;
 
   constructor(
     private dogSizeService: DogSizeService,
     private spotsService: SpotsService,
     public congestionService: CongestionService,
+    public weatherService: WeatherService,
     private router: Router,
   ) {}
 
@@ -67,9 +77,10 @@ export class MapPage implements AfterViewInit, OnDestroy {
       const container = document.getElementById('kakao-map');
       if (!container) return;
 
+      const center = CITY_CENTERS[this.selectedCity() ?? 'all'];
       this.map = new kakao.maps.Map(container, {
-        center: new kakao.maps.LatLng(36.3504, 127.3845),
-        level: 8,
+        center: new kakao.maps.LatLng(center.lat, center.lng),
+        level: center.level,
       });
       this.addMarkers();
     } catch (e) {
@@ -111,6 +122,17 @@ export class MapPage implements AfterViewInit, OnDestroy {
 
       this.markers.push(marker, label);
     });
+  }
+
+  selectCity(city: City | null) {
+    this.dogSizeService.setCity(city);
+    if (this.map) {
+      const center = CITY_CENTERS[city ?? 'all'];
+      this.map.setCenter(new kakao.maps.LatLng(center.lat, center.lng));
+      this.map.setLevel(center.level);
+      this.selectedSpot.set(null);
+      this.addMarkers();
+    }
   }
 
   goBack() { this.router.navigate(['/list']); }

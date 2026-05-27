@@ -32,10 +32,54 @@
   color: var(--color-text);
 }
 
+.map-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.weather-chip {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-muted);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 3px 9px;
+  white-space: nowrap;
+}
+
 .spot-count {
   font-size: 14px;
   color: var(--color-muted);
   font-weight: 600;
+}
+
+.map-city-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--color-card);
+  border-bottom: 1px solid var(--color-border);
+  z-index: 15;
+}
+
+.map-city-tab {
+  padding: 5px 16px;
+  border-radius: 20px;
+  border: 2px solid var(--color-border);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.map-city-tab.active {
+  border-color: #5C6BC0;
+  background: #5C6BC0;
+  color: #fff;
 }
 
 .kakao-map {
