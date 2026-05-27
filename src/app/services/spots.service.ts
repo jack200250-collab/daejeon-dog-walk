@@ -1,6 +1,22 @@
 import { Injectable } from '@angular/core';
 import { City, DogSize, Spot } from '../models/spot.model';
 
+// ── 공용 이미지 상수 ─────────────────────────────────────────────────────────
+const IMG = {
+  // 장소 배경 (2번째 이미지용)
+  parkPath:     'https://images.unsplash.com/photo-1669508595978-9db290965da3?w=800&q=80',
+  riversidePath:'https://images.unsplash.com/photo-1640339663732-b192347f5b32?w=800&q=80',
+  forestPath:   'https://images.unsplash.com/photo-1768315942723-2d67b59011ce?w=800&q=80',
+  // 강아지 사진
+  dogPark1:     'https://images.unsplash.com/photo-1761532979909-d9343beec20d?w=800&q=80', // 코기 공원
+  dogPark2:     'https://images.unsplash.com/photo-1766114314882-89b64589f2c5?w=800&q=80', // 가을공원 강아지들
+  dogParkPeople:'https://images.unsplash.com/photo-1762652847106-a7e2dc128f12?w=800&q=80', // 사람+강아지
+  dogRiver1:    'https://images.unsplash.com/photo-1630503266819-e6f4ffd3a5b9?w=800&q=80', // 수면 달리기
+  dogRiver2:    'https://images.unsplash.com/photo-1579369698120-eccdaf81ddfc?w=800&q=80', // 물웅덩이
+  dogForest:    'https://images.unsplash.com/photo-1727294316305-e536bacb65ff?w=800&q=80', // 숲길 강아지
+  dogGarden:    'https://images.unsplash.com/photo-1567617225762-5ae6ec78b6e1?w=800&q=80', // 꽃밭 강아지
+};
+
 const SPOTS: Spot[] = [
   // ── 대전 ────────────────────────────────────────────────────────────────
   {
@@ -12,7 +28,11 @@ const SPOTS: Spot[] = [
     spot_type: 'park',
     size_suitable: ['small', 'medium', 'large'],
     features: ['parking', 'toilet', 'bench', 'trail', 'shade', 'water'],
-    image_url: 'https://upload.wikimedia.org/wikipedia/commons/0/0b/Hanbat_Aboretum_Garden_under_the_Moon.jpg',
+    images: [
+      'https://upload.wikimedia.org/wikipedia/commons/0/0b/Hanbat_Aboretum_Garden_under_the_Moon.jpg',
+      IMG.parkPath,
+      IMG.dogGarden,
+    ],
     description: '대전 도심 속 넓은 수목원. 동·서원 합계 38만㎡의 잘 정비된 산책로와 넓은 잔디밭이 있어 모든 크기의 강아지와 여유롭게 산책할 수 있습니다.',
     why_recommended: '대전 최대 규모 수목원으로 포장 산책로가 넓고 평탄해 소형견 유모차도 이동 가능합니다. 그늘과 벤치가 풍부해 더운 날에도 쾌적하며, 목줄 착용 시 모든 견종 입장할 수 있습니다.',
     tips: [
@@ -39,7 +59,11 @@ const SPOTS: Spot[] = [
     spot_type: 'riverside',
     size_suitable: ['medium', 'large'],
     features: ['trail', 'bench', 'water', 'shade', 'parking'],
-    image_url: 'https://upload.wikimedia.org/wikipedia/commons/f/f1/Hiking_path_along_Gapcheon_in_Daejeon.jpg',
+    images: [
+      'https://upload.wikimedia.org/wikipedia/commons/f/f1/Hiking_path_along_Gapcheon_in_Daejeon.jpg',
+      IMG.riversidePath,
+      IMG.dogRiver1,
+    ],
     description: '갑천변을 따라 이어지는 긴 직선 산책로. 탁 트인 강변 공간이 넓어 중·대형견이 마음껏 뛰기에 최적입니다. 소형견은 자전거 통행에 주의가 필요합니다.',
     why_recommended: '갑천 양안을 따라 총 12 km의 수변 산책로가 펼쳐집니다. 자전거 도로와 분리된 구간이 많아 중·대형견이 마음껏 달릴 수 있고, 탁 트인 강바람이 여름에도 시원합니다.',
     tips: [
@@ -65,7 +89,11 @@ const SPOTS: Spot[] = [
     spot_type: 'park',
     size_suitable: ['small', 'medium', 'large'],
     features: ['parking', 'toilet', 'bench', 'trail', 'water', 'shade'],
-    image_url: 'https://upload.wikimedia.org/wikipedia/commons/5/54/Daejeon_Expo_Science_Park.jpg',
+    images: [
+      'https://upload.wikimedia.org/wikipedia/commons/5/54/Daejeon_Expo_Science_Park.jpg',
+      IMG.parkPath,
+      IMG.dogPark1,
+    ],
     description: '93 대전엑스포 터에 조성된 대형 공원. 잔디광장과 호수 산책로가 잘 갖춰져 있으며 크기 제한 없이 산책하기 좋습니다.',
     why_recommended: '호수 둘레 약 1.5 km 포장 산책로와 넓은 잔디광장이 있어 모든 견종에 적합합니다. 갑천 산책로와도 연결되어 코스를 이어 걸을 수 있어 운동량이 필요한 대형견에게 특히 추천합니다.',
     tips: [
@@ -92,7 +120,11 @@ const SPOTS: Spot[] = [
     spot_type: 'forest',
     size_suitable: ['small', 'medium'],
     features: ['trail', 'shade', 'bench', 'toilet', 'parking'],
-    image_url: 'https://upload.wikimedia.org/wikipedia/commons/d/d4/Daejeon_Metropolitan_City_in_Korea%2C_view_from_Bomunsan_Fortress.jpg',
+    images: [
+      'https://upload.wikimedia.org/wikipedia/commons/d/d4/Daejeon_Metropolitan_City_in_Korea%2C_view_from_Bomunsan_Fortress.jpg',
+      IMG.forestPath,
+      IMG.dogForest,
+    ],
     description: '대전 시내를 내려다볼 수 있는 숲길 산책로. 경사 구간이 있어 소형·중형견에게 적합하며, 대형견은 체력 부담이 있을 수 있습니다.',
     why_recommended: '도심에서 접근하기 쉬운 숲 산책지로 흙길·돌길이 혼재해 발바닥 자극에 좋습니다. 하단부 평탄 구간(왕복 약 1 km)은 소형견도 부담 없이 즐길 수 있으며, 울창한 숲 그늘 덕분에 여름에도 시원합니다.',
     tips: [
@@ -118,7 +150,11 @@ const SPOTS: Spot[] = [
     spot_type: 'trail',
     size_suitable: ['medium', 'large'],
     features: ['trail', 'shade', 'parking', 'toilet', 'bench'],
-    image_url: 'https://upload.wikimedia.org/wikipedia/commons/7/76/Daejeon_southern_cityscape_from_Gyejoksan.jpg',
+    images: [
+      'https://upload.wikimedia.org/wikipedia/commons/7/76/Daejeon_southern_cityscape_from_Gyejoksan.jpg',
+      IMG.forestPath,
+      IMG.dogForest,
+    ],
     description: '총 14.5 km의 황톳길 트레일. 체력이 좋은 중·대형견에게 최적의 장거리 코스입니다. 소형견은 체력 소모가 크므로 짧은 코스(2~3 km)만 권장합니다.',
     why_recommended: '전국 최장 14.5 km 황톳길 트레일로, 촉촉한 황토 흙길이 강아지 발바닥에 부드럽습니다. 오르내림이 완만해 체력이 좋은 중·대형견의 장거리 산책에 최적이며, 사계절 내내 울창한 숲 그늘이 이어집니다.',
     tips: [
@@ -144,7 +180,11 @@ const SPOTS: Spot[] = [
     spot_type: 'forest',
     size_suitable: ['small', 'medium'],
     features: ['trail', 'shade', 'bench', 'parking'],
-    image_url: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Wolpyeong_Park.JPG',
+    images: [
+      'https://upload.wikimedia.org/wikipedia/commons/5/51/Wolpyeong_Park.JPG',
+      IMG.forestPath,
+      IMG.dogForest,
+    ],
     description: '서구 도심 속 도시숲. 잘 정비된 평탄한 둘레길이 있어 소형·중형견의 일상 산책 코스로 안성맞춤입니다.',
     why_recommended: '대전 서구 도심에서 도보 접근 가능한 도시숲입니다. 약 2 km의 평탄한 흙길 둘레길이 정비되어 있어 이른 아침 조용한 숲 산책을 즐기기에 제격이며, 소형·중형견 일상 산책로로 꾸준히 인기입니다.',
     tips: [
@@ -169,7 +209,11 @@ const SPOTS: Spot[] = [
     spot_type: 'park',
     size_suitable: ['small'],
     features: ['bench', 'shade', 'water', 'toilet'],
-    image_url: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/%EC%9C%A0%EB%A6%BC%EA%B3%B5%EC%9B%90_%EB%B0%98%EB%8F%84%EC%A7%80.jpg',
+    images: [
+      'https://upload.wikimedia.org/wikipedia/commons/f/fd/%EC%9C%A0%EB%A6%BC%EA%B3%B5%EC%9B%90_%EB%B0%98%EB%8F%84%EC%A7%80.jpg',
+      IMG.parkPath,
+      IMG.dogGarden,
+    ],
     description: '유성온천 인근의 아담한 근린공원. 조용하고 한적해 소형견과 느긋하게 산책하기 좋습니다. 벤치와 그늘이 풍부해 쉬어가기도 편합니다.',
     why_recommended: '유성온천 관광지 인근에 있어 접근성이 좋고, 평일에는 방문객이 거의 없어 소형견과 조용히 산책하기에 완벽합니다. 정비된 잔디밭과 교목 그늘이 풍부해 강아지가 잠시 쉬어가기도 좋습니다.',
     tips: [
@@ -194,7 +238,11 @@ const SPOTS: Spot[] = [
     spot_type: 'park',
     size_suitable: ['small', 'medium', 'large'],
     features: ['parking', 'bench', 'water', 'trail', 'offleash'],
-    image_url: 'https://images.unsplash.com/photo-1425082661705-1834bfd09dca?w=600&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1425082661705-1834bfd09dca?w=600&q=80',
+      IMG.parkPath,
+      IMG.dogPark2,
+    ],
     description: '도안 신도시에 조성된 넓은 잔디광장 공원. 펜스 구역이 있어 대형견이 목줄을 풀고 뛰어놀 수 있습니다. 주차도 넉넉합니다.',
     why_recommended: '대전 신도시 도안에 조성된 넓은 공원으로, 목줄 해제 가능한 펜스 구역이 운영됩니다. 대전 시내에서 애견 목줄 해제 구역을 갖춘 몇 안 되는 공원 중 하나로 대형견 보호자에게 특히 추천합니다.',
     tips: [
@@ -220,7 +268,11 @@ const SPOTS: Spot[] = [
     spot_type: 'riverside',
     size_suitable: ['small', 'medium', 'large'],
     features: ['parking', 'bench', 'trail', 'shade', 'toilet'],
-    image_url: 'https://upload.wikimedia.org/wikipedia/commons/c/ca/Daecheong_Dam_Water_Culture_Center_-_%EB%8C%80%EC%B2%AD%EB%8C%90%EB%AC%BC%EB%AC%B8%ED%99%94%EA%B4%80.jpg',
+    images: [
+      'https://upload.wikimedia.org/wikipedia/commons/c/ca/Daecheong_Dam_Water_Culture_Center_-_%EB%8C%80%EC%B2%AD%EB%8C%80%EB%AC%BC%EB%AC%B8%ED%99%94%EA%B4%80.jpg',
+      IMG.riversidePath,
+      IMG.dogRiver2,
+    ],
     description: '대청댐 인근 광활한 호수 수변공원. 드넓은 자연 속에서 대형견이 자유롭게 산책할 수 있으며, 소형견과 함께하는 드라이브 겸 나들이 코스로도 인기입니다.',
     why_recommended: '대전 도심에서 차로 20~30분 거리의 대청호 수변에 펼쳐진 광활한 자연 공원입니다. 드넓은 공간과 맑은 공기 속에서 모든 크기의 강아지가 자유롭게 산책할 수 있으며, 봄 벚꽃·가을 단풍 시즌에는 절경이 펼쳐집니다.',
     tips: [
@@ -246,7 +298,11 @@ const SPOTS: Spot[] = [
     spot_type: 'forest',
     size_suitable: ['small', 'medium'],
     features: ['trail', 'shade', 'bench', 'parking'],
-    image_url: 'https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1448199973-03cce0bbc87b?w=600&q=80',
+      IMG.forestPath,
+      IMG.dogForest,
+    ],
     description: '평일에는 거의 방문객이 없는 조용한 생태공원. 자연 그대로의 숲길이 소형견과 느린 산책을 즐기기에 완벽합니다.',
     why_recommended: '방문객이 매우 적어 사실상 강아지와 단둘이 산책할 수 있는 조용한 생태 숲길입니다. 주차가 넉넉하고 무료이며, 자연 오솔길이 소형·중형견과 여유로운 숲 산책을 즐기기에 최적입니다.',
     tips: [
@@ -273,7 +329,11 @@ const SPOTS: Spot[] = [
     spot_type: 'park',
     size_suitable: ['small', 'medium', 'large'],
     features: ['parking', 'toilet', 'bench', 'trail', 'water', 'shade', 'offleash'],
-    image_url: 'https://upload.wikimedia.org/wikipedia/commons/0/0b/%EA%B5%AD%EB%A6%BD%EC%84%B8%EC%A2%85%EC%88%98%EB%AA%A9%EC%9B%901.jpg',
+    images: [
+      'https://upload.wikimedia.org/wikipedia/commons/0/0b/%EA%B5%AD%EB%A6%BD%EC%84%B8%EC%A2%85%EC%88%98%EB%AA%A9%EC%9B%901.jpg',
+      IMG.parkPath,
+      IMG.dogParkPeople,
+    ],
     description: '세종시 도심 한가운데 자리한 56만㎡ 규모의 대형 공원. 잘 정비된 산책로와 잔디광장, 반려동물 전용 놀이공간(애견런)이 마련돼 있어 모든 크기의 강아지가 뛰어놀기에 최적입니다.',
     why_recommended: '세종시 최대 공원으로 공식 애견런(목줄 해제 구역)이 운영됩니다. 음수대마다 반려동물 전용 물그릇이 비치되어 있고, 반려견 동반 카페가 공원 내외에 있어 수도권 수준의 반려동물 인프라를 갖추고 있습니다.',
     tips: [
@@ -301,7 +361,11 @@ const SPOTS: Spot[] = [
     spot_type: 'riverside',
     size_suitable: ['medium', 'large'],
     features: ['trail', 'bench', 'water', 'shade', 'parking'],
-    image_url: 'https://upload.wikimedia.org/wikipedia/commons/1/16/Geumnambo_in_Sejong_City.jpg',
+    images: [
+      'https://upload.wikimedia.org/wikipedia/commons/1/16/Geumnambo_in_Sejong_City.jpg',
+      IMG.riversidePath,
+      IMG.dogRiver1,
+    ],
     description: '금강변을 따라 이어지는 넓은 수변 산책로. 강바람을 맞으며 산책하기 좋고 탁 트인 공간 덕분에 중·대형견이 여유롭게 뛸 수 있습니다.',
     why_recommended: '금강을 따라 약 10 km의 수변 산책로가 이어집니다. 세종 보행교 일대는 자전거 도로와 분리된 전용 산책 구간으로, 강바람을 맞으며 달리는 것을 좋아하는 중·대형견에게 특히 추천합니다.',
     tips: [
@@ -327,7 +391,11 @@ const SPOTS: Spot[] = [
     spot_type: 'trail',
     size_suitable: ['small', 'medium'],
     features: ['trail', 'shade', 'bench', 'parking'],
-    image_url: 'https://upload.wikimedia.org/wikipedia/commons/6/68/Milmaru_Observatory_Tower.jpg',
+    images: [
+      'https://upload.wikimedia.org/wikipedia/commons/6/68/Milmaru_Observatory_Tower.jpg',
+      IMG.forestPath,
+      IMG.dogParkPeople,
+    ],
     description: '세종시 전경을 내려다볼 수 있는 낮은 구릉 위의 생태공원. 평탄하게 정비된 흙길 산책로가 소형·중형견과 걷기에 딱 좋습니다.',
     why_recommended: '세종 신도시 전경을 한눈에 조망할 수 있는 구릉 위 생태공원입니다. 방문객이 적어 강아지와 조용히 산책하기에 좋으며, 전망대까지 완만한 오르막(약 300 m)은 소형견도 충분히 오를 수 있습니다.',
     tips: [
@@ -352,7 +420,11 @@ const SPOTS: Spot[] = [
     spot_type: 'riverside',
     size_suitable: ['small', 'medium', 'large'],
     features: ['trail', 'bench', 'water', 'shade'],
-    image_url: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80',
+      IMG.riversidePath,
+      IMG.dogRiver2,
+    ],
     description: '세종 신도시를 가로지르는 방축천 양안의 생태 하천공원. 평탄한 수변 산책로가 잘 정비돼 있어 소형견부터 대형견까지 편하게 걸을 수 있습니다.',
     why_recommended: '세종 신도시 도심 속을 흐르는 방축천 수변 공원입니다. 음악분수·야경·포장 산책로 등 도심 인프라가 잘 갖춰져 있어 저녁 산책으로도 훌륭하며, 반려견 유모차도 이동 가능한 포장 산책로가 약 6 km 이어집니다.',
     tips: [
@@ -377,7 +449,11 @@ const SPOTS: Spot[] = [
     spot_type: 'park',
     size_suitable: ['small', 'medium', 'large'],
     features: ['parking', 'toilet', 'bench', 'trail', 'water', 'shade'],
-    image_url: 'https://upload.wikimedia.org/wikipedia/commons/1/1b/Sejong_lake_park_190609_01.jpg',
+    images: [
+      'https://upload.wikimedia.org/wikipedia/commons/1/1b/Sejong_lake_park_190609_01.jpg',
+      IMG.riversidePath,
+      IMG.dogPark1,
+    ],
     description: '세종 정부청사 옆 호수를 중심으로 조성된 도심 공원. 넓은 잔디광장과 호수 둘레 평탄한 산책로가 모든 크기의 강아지와 여유롭게 걷기에 좋습니다.',
     why_recommended: '세종 정부청사 옆 호수를 중심으로 조성된 도심 공원으로, 호수 둘레 약 2.5 km 포장 산책로가 모든 견종에 적합합니다. 주변에 반려견 동반 가능한 카페가 여럿 있고, 잔디밭 배변봉투함이 비치되어 반려동물 친화 환경이 잘 갖춰져 있습니다.',
     tips: [

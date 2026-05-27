@@ -1,0 +1,27 @@
+<div class="carousel">
+  <div
+    class="slides"
+    [style.transform]="'translateX(-' + currentIndex() * 100 + '%)'"
+  >
+    @for (img of images(); track img) {
+      <img [src]="img" [alt]="alt()" class="slide-img" loading="lazy" />
+    }
+  </div>
+
+  @if (hasMultiple()) {
+    <button class="nav prev" (click)="prev()">&#8249;</button>
+    <button class="nav next" (click)="next()">&#8250;</button>
+
+    <div class="dots">
+      @for (img of images(); track img; let i = $index) {
+        <button
+          class="dot"
+          [class.active]="currentIndex() === i"
+          (click)="goTo(i)"
+        ></button>
+      }
+    </div>
+
+    <div class="counter">{{ currentIndex() + 1 }} / {{ images().length }}</div>
+  }
+</div>

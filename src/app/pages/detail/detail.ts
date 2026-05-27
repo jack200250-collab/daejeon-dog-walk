@@ -4,13 +4,14 @@ import { SpotsService } from '../../services/spots.service';
 import { CongestionService } from '../../services/congestion.service';
 import { WeatherService } from '../../services/weather.service';
 import { CongestionBadge } from '../../components/congestion-badge/congestion-badge';
+import { ImageCarousel } from '../../components/image-carousel/image-carousel';
 import { FEATURE_ICONS, FEATURE_LABELS, DOG_SIZE_LABELS, CITY_LABELS, Spot } from '../../models/spot.model';
 
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.html',
   styleUrl: './detail.css',
-  imports: [CongestionBadge],
+  imports: [CongestionBadge, ImageCarousel],
 })
 export class DetailPage {
   readonly spot = signal<Spot | undefined>(undefined);

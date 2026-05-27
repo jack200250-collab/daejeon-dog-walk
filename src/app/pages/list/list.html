@@ -37,7 +37,7 @@
     @for (spot of spots(); track spot.id) {
       <a class="spot-card" [routerLink]="['/detail', spot.id]">
         <div class="spot-img-wrap">
-          <img [src]="spot.image_url" [alt]="spot.name" class="spot-img" loading="lazy" />
+          <img [src]="spot.images[0]" [alt]="spot.name" class="spot-img" loading="lazy" />
           <div class="congestion-overlay">
             <app-congestion-badge [info]="congestionService.getCongestion(spot.spot_type)" />
           </div>

@@ -39,7 +39,7 @@
   @if (selectedSpot()) {
     <div class="bottom-panel">
       <button class="close-btn" (click)="closePanel()">✕</button>
-      <img [src]="selectedSpot()!.image_url" [alt]="selectedSpot()!.name" class="panel-img" />
+      <img [src]="selectedSpot()!.images[0]" [alt]="selectedSpot()!.name" class="panel-img" />
       <div class="panel-body">
         <div class="panel-top">
           <span class="panel-name">{{ selectedSpot()!.name }}</span>

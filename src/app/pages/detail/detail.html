@@ -3,7 +3,7 @@
 
     <!-- 히어로 이미지 -->
     <div class="img-wrap">
-      <img [src]="spot()!.image_url" [alt]="spot()!.name" class="hero-img" />
+      <app-image-carousel [images]="spot()!.images" [alt]="spot()!.name" />
       <div class="img-overlay"></div>
       <button class="back-btn" (click)="goBack()">←</button>
       <div class="hero-info">

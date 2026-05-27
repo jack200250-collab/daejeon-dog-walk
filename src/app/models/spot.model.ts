@@ -12,7 +12,7 @@ export interface Spot {
   description: string;
   size_suitable: DogSize[];
   features: string[];
-  image_url: string;
+  images: string[];
   spot_type: SpotType;
   city: City;
   why_recommended: string;
