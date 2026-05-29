@@ -26,15 +26,8 @@
       <div class="spinner"></div>
       <p>지도 불러오는 중...</p>
     </div>
-  } @else if (mapError()) {
-    <div class="map-error">
-      <p>🗺️ 지도를 불러오지 못했습니다.</p>
-      <small>카카오 개발자 콘솔 → 플랫폼 → Web에<br>
-        <b>https://daejeon-dog-walk.vercel.app</b> 이 등록됐는지 확인해주세요.</small>
-    </div>
-  } @else {
-    <div id="kakao-map" class="kakao-map"></div>
   }
+  <div id="leaflet-map" class="kakao-map"></div>
 
   @if (selectedSpot()) {
     <div class="bottom-panel">

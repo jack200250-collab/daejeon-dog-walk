@@ -18,6 +18,8 @@
     "@angular/router": "^21.2.0",
     "@angular/service-worker": "^21.2.14",
     "@supabase/supabase-js": "^2.106.1",
+    "@types/leaflet": "^1.9.21",
+    "leaflet": "^1.9.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

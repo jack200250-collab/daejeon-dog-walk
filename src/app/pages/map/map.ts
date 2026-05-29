@@ -1,18 +1,17 @@
 import { Component, AfterViewInit, OnDestroy, computed, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import * as L from 'leaflet';
 import { DogSizeService } from '../../services/dog-size.service';
 import { SpotsService } from '../../services/spots.service';
 import { CongestionService } from '../../services/congestion.service';
+import { WeatherService } from '../../services/weather.service';
 import { CongestionBadge } from '../../components/congestion-badge/congestion-badge';
 import { City, CITY_LABELS, DOG_SIZE_LABELS, Spot } from '../../models/spot.model';
-import { WeatherService } from '../../services/weather.service';
 
-declare const kakao: any;
-
-const CITY_CENTERS: Record<string, { lat: number; lng: number; level: number }> = {
-  daejeon: { lat: 36.3504, lng: 127.3845, level: 8 },
-  sejong:  { lat: 36.5140, lng: 127.2650, level: 8 },
-  all:     { lat: 36.4350, lng: 127.3300, level: 9 },
+const CITY_CENTERS: Record<string, { lat: number; lng: number; zoom: number }> = {
+  daejeon: { lat: 36.3504, lng: 127.3845, zoom: 13 },
+  sejong:  { lat: 36.5140, lng: 127.2650, zoom: 13 },
+  all:     { lat: 36.4350, lng: 127.3300, zoom: 12 },
 };
 
 @Component({
@@ -22,13 +21,12 @@ const CITY_CENTERS: Record<string, { lat: number; lng: number; level: number }> 
   imports: [CongestionBadge],
 })
 export class MapPage implements AfterViewInit, OnDestroy {
-  private map: any;
-  private markers: any[] = [];
-  private retryTimer: any;
+  private map!: L.Map;
+  private markers: L.Layer[] = [];
 
   readonly selectedSpot = signal<Spot | null>(null);
-  readonly mapError = signal(false);
   readonly mapLoading = signal(true);
+  readonly mapError = signal(false);
   readonly selectedCity = computed(() => this.dogSizeService.selectedCity());
   readonly selectedSize = computed(() => this.dogSizeService.selectedSize());
   readonly spots = computed(() =>
@@ -48,92 +46,71 @@ export class MapPage implements AfterViewInit, OnDestroy {
   ) {}
 
   ngAfterViewInit() {
-    this.waitForKakao(0);
-  }
-
-  ngOnDestroy() {
-    clearTimeout(this.retryTimer);
-    this.markers.forEach(m => m.setMap(null));
-    this.markers = [];
-  }
-
-  // SDK가 완전히 로드될 때까지 최대 6초(20회 × 300ms) 재시도
-  private waitForKakao(attempt: number) {
-    if (typeof kakao !== 'undefined') {
-      kakao.maps.load(() => {
-        this.mapLoading.set(false);
-        this.initMap();
-      });
-    } else if (attempt < 20) {
-      this.retryTimer = setTimeout(() => this.waitForKakao(attempt + 1), 300);
-    } else {
-      this.mapLoading.set(false);
-      this.mapError.set(true);
-    }
+    // #leaflet-map은 항상 DOM에 있으므로 한 프레임 뒤 바로 초기화
+    requestAnimationFrame(() => this.initMap());
   }
 
   private initMap() {
-    try {
-      const container = document.getElementById('kakao-map');
-      if (!container) return;
+    const iconProto = L.Icon.Default.prototype as any;
+    delete iconProto._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    });
 
-      const center = CITY_CENTERS[this.selectedCity() ?? 'all'];
-      this.map = new kakao.maps.Map(container, {
-        center: new kakao.maps.LatLng(center.lat, center.lng),
-        level: center.level,
-      });
-      this.addMarkers();
-    } catch (e) {
-      console.error('Kakao Map init error:', e);
-      this.mapError.set(true);
-    }
+    const center = CITY_CENTERS[this.selectedCity() ?? 'all'];
+    this.map = L.map('leaflet-map', {
+      center: [center.lat, center.lng],
+      zoom: center.zoom,
+      zoomControl: true,
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 19,
+    }).addTo(this.map);
+
+    this.addMarkers();
+    this.mapLoading.set(false);
+    // 로딩 오버레이 제거 후 컨테이너 크기 재계산
+    setTimeout(() => this.map.invalidateSize(), 50);
+  }
+
+  ngOnDestroy() {
+    if (this.map) this.map.remove();
   }
 
   private addMarkers() {
-    this.markers.forEach(m => m.setMap(null));
+    this.markers.forEach(m => this.map.removeLayer(m));
     this.markers = [];
 
     this.spots().forEach(spot => {
-      const pos = new kakao.maps.LatLng(spot.lat, spot.lng);
       const congestion = this.congestionService.getCongestion(spot.spot_type);
 
-      const marker = new kakao.maps.Marker({
-        map: this.map,
-        position: pos,
-        title: spot.name,
+      const icon = L.divIcon({
+        html: `<div class="custom-marker" style="background:${congestion.color}">
+                 ${congestion.emoji} ${spot.name}
+               </div>`,
+        className: '',
+        iconAnchor: [0, 36],
       });
 
-      const label = new kakao.maps.CustomOverlay({
-        map: this.map,
-        position: pos,
-        content: `<div style="
-          background:${congestion.color};color:#fff;
-          padding:4px 8px;border-radius:12px;
-          font-size:11px;font-weight:700;white-space:nowrap;
-          box-shadow:0 2px 6px rgba(0,0,0,0.25);
-          pointer-events:none;
-        ">${congestion.emoji} ${congestion.label}</div>`,
-        yAnchor: 3.2,
-      });
-
-      kakao.maps.event.addListener(marker, 'click', () => {
-        this.selectedSpot.set(spot);
-      });
-
-      this.markers.push(marker, label);
+      const marker = L.marker([spot.lat, spot.lng], { icon }).addTo(this.map);
+      marker.on('click', () => this.selectedSpot.set(spot));
+      this.markers.push(marker);
     });
   }
 
   selectCity(city: City | null) {
     this.dogSizeService.setCity(city);
-    if (this.map) {
-      const center = CITY_CENTERS[city ?? 'all'];
-      this.map.setCenter(new kakao.maps.LatLng(center.lat, center.lng));
-      this.map.setLevel(center.level);
-      this.selectedSpot.set(null);
-      this.addMarkers();
-    }
+    const center = CITY_CENTERS[city ?? 'all'];
+    this.map.setView([center.lat, center.lng], center.zoom);
+    this.selectedSpot.set(null);
+    this.addMarkers();
   }
+
+  retryMap() {}
 
   goBack() { this.router.navigate(['/list']); }
   goToDetail(id: string) { this.router.navigate(['/detail', id]); }

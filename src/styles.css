@@ -38,3 +38,16 @@ img {
   display: block;
   max-width: 100%;
 }
+
+/* Leaflet 커스텀 마커 (컴포넌트 외부 DOM) */
+.custom-marker {
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.30);
+  cursor: pointer;
+  font-family: var(--font);
+}
